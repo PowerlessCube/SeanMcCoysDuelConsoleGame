@@ -14,7 +14,24 @@ var players = new List<Player>() { playerOne, playerTwo };
 
 int i = new Random().Next(0, players.Count);
 
+Player currentPlayer;
+Player otherPlayer;
+
 #region Game Session Actions
+void StartGame()
+{
+    if (isGameStarted)
+    {
+        Console.WriteLine("Game Starts!");
+        Console.WriteLine("Burying random cards from players' hands...");
+        players.ForEach(player =>
+        {
+            MoveRandomCardBetweenDecks(player.Hand, buriedPile, true);
+        });
+    }
+    isGameStarted = false;
+}
+
 void EndSession(string playerName, bool quit = false)
 {
     if (quit)
@@ -31,40 +48,37 @@ void EndSession(string playerName, bool quit = false)
     escape = false;
 }
 
-void StartGame()
+int ChangeIndex() => i == 0 ? 1 : 0;
+
+void SwitchPlayers()
 {
-    if (isGameStarted)
-    {
-        Console.WriteLine("Game Starts!");
-        Console.WriteLine("Burying random cards from players' hands...");
-        players.ForEach(player =>
-        {
-            MoveRandomCardBetweenDecks(player.Hand, buriedPile, true);
-        });
-    }
-    isGameStarted = false;
+    i = ChangeIndex();
+    int currentPlayerIndex = i;
+    int otherPlayerIndex = ChangeIndex();
+    currentPlayer = players[currentPlayerIndex];
+    otherPlayer = players[otherPlayerIndex];
 }
 
 void CheckWinCondition()
 {
-    if (towerOfPower.Cards.Count == 0 || players[i].Hand.Cards.Contains(Cards.Dodge))
+    if (towerOfPower.Cards.Count == 0 || otherPlayer.Hand.Cards.Contains(Cards.Dodge))
     {
         return;
     }
     
     var lastCardPlayed = towerOfPower.Cards.Last();
 
-    for (int j = 0; j < players[i].Hand.Cards.Count - 1; j++)
+    for (int j = 0; j < otherPlayer.Hand.Cards.Count - 1; j++)
     {
 
-        if (players[i].Hand.Cards[j].Value < lastCardPlayed.Value)
+        if (otherPlayer.Hand.Cards[j].Value < lastCardPlayed.Value)
         {
             break;
         }
         else
         {
-            Console.WriteLine($"{players[i].Name} has no cards below {lastCardPlayed.Value} to play.");
-            EndSession(players[i].Name);
+            Console.WriteLine($"{otherPlayer.Name} has no cards below {lastCardPlayed.Value} to play.");
+            EndSession(otherPlayer.Name);
             break;
         }
     }
@@ -73,12 +87,12 @@ void CheckWinCondition()
 void DisplayHand()
 {
     Console.WriteLine();
-    Console.WriteLine($"{players[i].Name}'s Turn.");
+    Console.WriteLine($"{currentPlayer.Name}'s Turn.");
 
-    if (players[i].Hand.Cards.Count == 0)
-        EndSession(players[i].Name);
+    if (currentPlayer.Hand.Cards.Count == 0)
+        EndSession(currentPlayer.Name);
 
-    DisplayDeck(players[i].Hand.Cards);
+    DisplayDeck(currentPlayer.Hand.Cards);
 }
 
 void DisplayGameState()
@@ -175,11 +189,11 @@ void PlayerInputOptions()
     else if (userInput == Cards.Dodge.Value.ToString())
     {
         if (!ValidateCardAgainstTowerOfPower(Cards.Dodge)) return;
-        Console.WriteLine($"{players[i].Name} played '{Cards.Dodge.Name}'");
+        Console.WriteLine($"{currentPlayer.Name} played '{Cards.Dodge.Name}'");
         PlayCard(Cards.Dodge);
     }
     else if (userInput == "q")
-        EndSession(players[i].Name, true);
+        EndSession(currentPlayer.Name, true);
 }
 
 bool ValidateCardAgainstTowerOfPower(Card card)
@@ -210,12 +224,9 @@ bool ValidateCardAgainstTowerOfPower(Card card)
     return true;
 }
 
-int setCurrentPlayerIndex () => i == 0 ? 1 : 0;
-
 void PlayCard(Card card)
 {
-    MoveCardBetweenDecks(card, players[i].Hand, towerOfPower);
-    i = setCurrentPlayerIndex();
+    MoveCardBetweenDecks(card, currentPlayer.Hand, towerOfPower);
 }
 
 bool MoveRandomCardBetweenDecks(Deck fromDeck, Deck toDeck, bool hideCard = false)
@@ -262,7 +273,7 @@ bool MoveCardBetweenDecks(Card card, Deck fromDeck, Deck toDeck, bool hideCard =
 void KillingBlowAction()
 {
     // Bury a face up card.
-    Console.WriteLine($"{players[i].Name} played '{Cards.KillingBlow.Name}'");
+    Console.WriteLine($"{currentPlayer.Name} played '{Cards.KillingBlow.Name}'");
     if (towerOfPower.Cards.Count == 0)
     {
         Console.WriteLine($"Nothing in the Tower of Power to bury.");
@@ -363,7 +374,7 @@ void KillingBlowAction()
         if (killingBlowCardChoice == "q")
         {
             killingBlowChoice = false;
-            EndSession(players[i].Name, true);
+            EndSession(currentPlayer.Name, true);
         }
     }
 }
@@ -371,14 +382,14 @@ void KillingBlowAction()
 void HiddenStrengthAction()
 {
     // Draw a random buried card.
-    Console.WriteLine($"{players[i].Name} played '{Cards.HiddenStrength.Name}'");
-    MoveRandomCardBetweenDecks(buriedPile, players[i].Hand, true);
+    Console.WriteLine($"{currentPlayer.Name} played '{Cards.HiddenStrength.Name}'");
+    MoveRandomCardBetweenDecks(buriedPile, currentPlayer.Hand, true);
 }
 
 void PrecisionStrikeAction()
 {
     // Put a face up card in your hand.
-    Console.WriteLine($"{players[i].Name} played '{Cards.PrecisionStrike.Name}'");
+    Console.WriteLine($"{currentPlayer.Name} played '{Cards.PrecisionStrike.Name}'");
     if (towerOfPower.Cards.Count == 0)
     {
         Console.WriteLine($"Nothing in the Tower of Power to take.");
@@ -397,7 +408,7 @@ void PrecisionStrikeAction()
 
         if (precisionStrikeCardChoice == Cards.KillingBlow.Value.ToString())
         {
-            if (MoveCardBetweenDecks(Cards.KillingBlow, towerOfPower, players[i].Hand))
+            if (MoveCardBetweenDecks(Cards.KillingBlow, towerOfPower, currentPlayer.Hand))
             {
                 precisionStrikeChoice = false;
                 return;
@@ -405,7 +416,7 @@ void PrecisionStrikeAction()
         }
         else if (precisionStrikeCardChoice == Cards.HiddenStrength.Value.ToString())
         {
-            if (MoveCardBetweenDecks(Cards.HiddenStrength, towerOfPower, players[i].Hand));
+            if (MoveCardBetweenDecks(Cards.HiddenStrength, towerOfPower, currentPlayer.Hand));
             {
                 precisionStrikeChoice = false;
                 return;
@@ -413,7 +424,7 @@ void PrecisionStrikeAction()
         }
         else if (precisionStrikeCardChoice == Cards.PrecisionStrike.Value.ToString())
         {
-            if (MoveCardBetweenDecks(Cards.PrecisionStrike, towerOfPower, players[i].Hand))
+            if (MoveCardBetweenDecks(Cards.PrecisionStrike, towerOfPower, currentPlayer.Hand))
             {
                 precisionStrikeChoice = false;
                 return;
@@ -421,7 +432,7 @@ void PrecisionStrikeAction()
         }
         else if (precisionStrikeCardChoice == Cards.Feint.Value.ToString())
         {
-            if (MoveCardBetweenDecks(Cards.Feint, towerOfPower, players[i].Hand))
+            if (MoveCardBetweenDecks(Cards.Feint, towerOfPower, currentPlayer.Hand))
             {
                 precisionStrikeChoice = false;
                 return;
@@ -429,7 +440,7 @@ void PrecisionStrikeAction()
         }
         else if (precisionStrikeCardChoice == Cards.CopyCat.Value.ToString())
         {
-            if (MoveCardBetweenDecks(Cards.CopyCat, towerOfPower, players[i].Hand))
+            if (MoveCardBetweenDecks(Cards.CopyCat, towerOfPower, currentPlayer.Hand))
             {
                 precisionStrikeChoice = false;
                 return;
@@ -437,7 +448,7 @@ void PrecisionStrikeAction()
         }
         else if (precisionStrikeCardChoice == Cards.ChangeStance.Value.ToString())
         {
-            if (MoveCardBetweenDecks(Cards.ChangeStance, towerOfPower, players[i].Hand))
+            if (MoveCardBetweenDecks(Cards.ChangeStance, towerOfPower, currentPlayer.Hand))
             {
                 precisionStrikeChoice = false;
                 return;
@@ -445,7 +456,7 @@ void PrecisionStrikeAction()
         }
         else if (precisionStrikeCardChoice == Cards.Disarm.Value.ToString())
         {
-            if (MoveCardBetweenDecks(Cards.Disarm, towerOfPower, players[i].Hand))
+            if (MoveCardBetweenDecks(Cards.Disarm, towerOfPower, currentPlayer.Hand))
             {
                 precisionStrikeChoice = false;
                 return;
@@ -453,7 +464,7 @@ void PrecisionStrikeAction()
         }
         else if (precisionStrikeCardChoice == Cards.Backstab.Value.ToString())
         {
-            if (MoveCardBetweenDecks(Cards.Backstab, towerOfPower, players[i].Hand))
+            if (MoveCardBetweenDecks(Cards.Backstab, towerOfPower, currentPlayer.Hand))
             {
                 precisionStrikeChoice = false;
                 return;
@@ -461,7 +472,7 @@ void PrecisionStrikeAction()
         }
         else if (precisionStrikeCardChoice == Cards.Dodge.Value.ToString())
         {
-            if (MoveCardBetweenDecks(Cards.Dodge, towerOfPower, players[i].Hand))
+            if (MoveCardBetweenDecks(Cards.Dodge, towerOfPower, currentPlayer.Hand))
             {
                 precisionStrikeChoice = false;
                 return;
@@ -470,7 +481,7 @@ void PrecisionStrikeAction()
         else if (precisionStrikeCardChoice == "q")
         {
             precisionStrikeChoice = false;
-            EndSession(players[i].Name, true);
+            EndSession(currentPlayer.Name, true);
         }
     }
 }
@@ -478,14 +489,15 @@ void PrecisionStrikeAction()
 void FeintAction()
 {
     // Play a random card from your target's hand. Ignore the ability.
-    Console.WriteLine($"{players[i].Name} played '{Cards.Feint.Name}'");
-    MoveRandomCardBetweenDecks(players[i].Hand, towerOfPower, true);
+    Console.WriteLine($"{currentPlayer.Name} played '{Cards.Feint.Name}'");
+    PlayCard(Cards.Feint);
+    MoveRandomCardBetweenDecks(otherPlayer.Hand, towerOfPower);
 };
 
 void CopyCatAction()
 {
     // Copy the ability of any face up card.
-    Console.WriteLine($"{players[i].Name} played '{Cards.CopyCat.Name}'");
+    Console.WriteLine($"{currentPlayer.Name} played '{Cards.CopyCat.Name}'");
 
     if (towerOfPower.Cards.Count == 0)
     {
@@ -595,22 +607,20 @@ void CopyCatAction()
         else if (CopyCatCardChoice == "q")
         {
             CopyCatChoice = false;
-            EndSession(players[i].Name, true);
+            EndSession(currentPlayer.Name, true);
         }
     }
 };
 
 void ChangeStanceAction()
 {
-    Console.WriteLine($"{players[i].Name} played '{Cards.ChangeStance.Name}'");
-
-    var otherPlayerIndex = setCurrentPlayerIndex();
+    Console.WriteLine($"{currentPlayer.Name} played '{Cards.ChangeStance.Name}'");
 
     var noCardOverFive = true;
 
-    for (int k = 0; k < players[otherPlayerIndex].Hand.Cards.Count - 1; k++)
+    for (int k = 0; k < otherPlayer.Hand.Cards.Count - 1; k++)
     {
-        if (players[otherPlayerIndex].Hand.Cards[k].Value > Cards.ChangeStance.Value)
+        if (otherPlayer.Hand.Cards[k].Value > Cards.ChangeStance.Value)
         {   
             noCardOverFive = false;
             break;
@@ -619,29 +629,26 @@ void ChangeStanceAction()
 
     if (noCardOverFive)
     {
-        Console.WriteLine($"{players[otherPlayerIndex].Name} has no cards over 5 to play.");
-        EndSession(players[otherPlayerIndex].Name);
+        Console.WriteLine($"{otherPlayer.Name} has no cards over 5 to play.");
+        EndSession(otherPlayer.Name);
     }
 };
 
 void DisarmAction()
 {
     // Target buries a card at random.
-    Console.WriteLine($"{players[i].Name} played '{Cards.Disarm.Name}'");
-    var otherPlayerIndex = setCurrentPlayerIndex();
-    MoveRandomCardBetweenDecks(players[otherPlayerIndex].Hand, buriedPile, true);
+    Console.WriteLine($"{currentPlayer.Name} played '{Cards.Disarm.Name}'");
+    MoveRandomCardBetweenDecks(otherPlayer.Hand, buriedPile, true);
 };
 
 void BackstabAction()
 {
     // Target gives you a card of their choice.
-    Console.WriteLine($"{players[i].Name} played '{Cards.Backstab.Name}'");
+    Console.WriteLine($"{currentPlayer.Name} played '{Cards.Backstab.Name}'");
 
-    var otherPlayerIndex = setCurrentPlayerIndex();
-
-    if (players[otherPlayerIndex].Hand.Cards.Count == 0)
+    if (otherPlayer.Hand.Cards.Count == 0)
     {
-        Console.WriteLine($"Nothing in the {players[otherPlayerIndex].Name}'s Hand to take.");
+        Console.WriteLine($"Nothing in the {otherPlayer.Name}'s Hand to take.");
         return;
     }
 
@@ -649,8 +656,8 @@ void BackstabAction()
 
     while (backstabChoice)
     {
-        Console.WriteLine($"Choose a card from your hand to give to {players[i].Name}");
-        DisplayDeck(players[otherPlayerIndex].Hand.Cards);
+        Console.WriteLine($"{otherPlayer.Name}, Choose a card from your hand to give to {currentPlayer.Name}");
+        DisplayDeck(otherPlayer.Hand.Cards);
 
         Console.WriteLine();
 
@@ -658,7 +665,7 @@ void BackstabAction()
 
         if (BackstabCardChoice == Cards.KillingBlow.Value.ToString())
         {
-            if (MoveCardBetweenDecks(Cards.KillingBlow, players[otherPlayerIndex].Hand, players[i].Hand))
+            if (MoveCardBetweenDecks(Cards.KillingBlow, otherPlayer.Hand, currentPlayer.Hand))
             {
                 backstabChoice = false;
                 return;
@@ -666,7 +673,7 @@ void BackstabAction()
         }
         else if (BackstabCardChoice == Cards.HiddenStrength.Value.ToString())
         {
-            if (MoveCardBetweenDecks(Cards.HiddenStrength, players[otherPlayerIndex].Hand, players[i].Hand))
+            if (MoveCardBetweenDecks(Cards.HiddenStrength, otherPlayer.Hand, currentPlayer.Hand))
             {
                 backstabChoice = false;
                 return;
@@ -674,7 +681,7 @@ void BackstabAction()
         }
         else if (BackstabCardChoice == Cards.PrecisionStrike.Value.ToString())
         {
-            if (MoveCardBetweenDecks(Cards.PrecisionStrike, players[otherPlayerIndex].Hand, players[i].Hand))
+            if (MoveCardBetweenDecks(Cards.PrecisionStrike, otherPlayer.Hand, currentPlayer.Hand))
             {
                 backstabChoice = false;
                 return;
@@ -682,7 +689,7 @@ void BackstabAction()
         }
         else if (BackstabCardChoice == Cards.Feint.Value.ToString())
         {
-            if (MoveCardBetweenDecks(Cards.Feint, players[otherPlayerIndex].Hand, players[i].Hand))
+            if (MoveCardBetweenDecks(Cards.Feint, otherPlayer.Hand, currentPlayer.Hand))
             {
                 backstabChoice = false;
                 return;
@@ -690,7 +697,7 @@ void BackstabAction()
         }
         else if (BackstabCardChoice == Cards.ChangeStance.Value.ToString())
         {
-            if (MoveCardBetweenDecks(Cards.ChangeStance, players[otherPlayerIndex].Hand, players[i].Hand))
+            if (MoveCardBetweenDecks(Cards.ChangeStance, otherPlayer.Hand, currentPlayer.Hand))
             {
                 backstabChoice = false;
                 return;
@@ -698,7 +705,7 @@ void BackstabAction()
         }
         else if (BackstabCardChoice == Cards.Disarm.Value.ToString())
         {
-            if (MoveCardBetweenDecks(Cards.Disarm, players[otherPlayerIndex].Hand, players[i].Hand))
+            if (MoveCardBetweenDecks(Cards.Disarm, otherPlayer.Hand, currentPlayer.Hand))
             {
                 backstabChoice = false;
                 return;
@@ -706,7 +713,7 @@ void BackstabAction()
         }
         else if (BackstabCardChoice == Cards.Backstab.Value.ToString())
         {
-            if (MoveCardBetweenDecks(Cards.Backstab, players[otherPlayerIndex].Hand, players[i].Hand))
+            if (MoveCardBetweenDecks(Cards.Backstab, otherPlayer.Hand, currentPlayer.Hand))
             {
                 backstabChoice = false;
                 return;
@@ -714,7 +721,7 @@ void BackstabAction()
         }
         else if (BackstabCardChoice == Cards.Dodge.Value.ToString())
         {
-            if (MoveCardBetweenDecks(Cards.Dodge, players[otherPlayerIndex].Hand, players[i].Hand))
+            if (MoveCardBetweenDecks(Cards.Dodge, otherPlayer.Hand, currentPlayer.Hand))
             {
                 backstabChoice = false;
                 return;
@@ -723,7 +730,7 @@ void BackstabAction()
         else if (BackstabCardChoice == "q")
         {
             backstabChoice = false;
-            EndSession(players[i].Name, true);
+            EndSession(otherPlayer.Name, true);
         }
     }
 }
@@ -733,6 +740,7 @@ void BackstabAction()
 while (escape)
 {
     StartGame();
+    SwitchPlayers();
     DisplayGameState();
     DisplayHand();
     PlayerInputOptions();
