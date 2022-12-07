@@ -39,9 +39,7 @@ void StartGame()
         {
             MoveRandomCardBetweenDecks(player.Hand, buriedPile, true);
         });
-
     }
-
     isGameStarted = false;
 }
 
@@ -63,6 +61,7 @@ void CheckWinCondition()
         }
         else
         {
+            Console.WriteLine($"{players[i].Name} has no cards below {lastCardPlayed.Value} to play.");
             EndSession(players[i].Name);
             break;
         }
@@ -87,19 +86,20 @@ void DisplayGameState()
     Console.WriteLine($"{buriedPile.Name}: {buriedPile.Cards.Count}");
 
     Console.WriteLine();
+
     Console.WriteLine("Player Hands");
     Console.WriteLine($"{playerOne.Name} has {playerOne.Hand.Cards.Count} card(s) in hand.");
     Console.WriteLine($"{playerTwo.Name} has {playerTwo.Hand.Cards.Count} card(s) in hand.");
 
+    Console.WriteLine();
+
     if (towerOfPower.Cards.Count == 0)
     {
-        Console.WriteLine();
         Console.WriteLine("Nothing in the Tower");
     }
     else
     {
         var card = towerOfPower?.Cards.Last();
-        Console.WriteLine();
         Console.WriteLine($"Last card played: {card?.Value}: {card?.Name} - {card?.Description}");
     }
 }
@@ -119,97 +119,64 @@ void PlayerInputOptions()
     Console.WriteLine();
 
     var userInput = Console.ReadLine();
+
     Console.WriteLine();
 
     if (userInput == Cards.KillingBlow.Value.ToString())
     {
-        if (CheckCardAgainstTowerOfPower(Cards.KillingBlow))
-        {
-            Console.WriteLine($"{players[i].Name} played '{Cards.KillingBlow.Name}'");
-            KillingBlowAction();
-            PlayCard(Cards.KillingBlow);
-        }
+        if (!CheckCardAgainstTowerOfPower(Cards.KillingBlow)) return;
+        KillingBlowAction();
+        PlayCard(Cards.KillingBlow);
     }
-
-    if (userInput == Cards.HiddenStrength.Value.ToString())
+    else if (userInput == Cards.HiddenStrength.Value.ToString())
     {
-        if (CheckCardAgainstTowerOfPower(Cards.HiddenStrength))
-        {
-            Console.WriteLine($"{players[i].Name} played '{Cards.HiddenStrength.Name}'");
-            HiddenStrengthAction();
-            PlayCard(Cards.HiddenStrength);
-        }
+        if (!CheckCardAgainstTowerOfPower(Cards.HiddenStrength)) return;
+        HiddenStrengthAction();
+        PlayCard(Cards.HiddenStrength);
     }
-
-    if (userInput == Cards.PrecisionStrike.Value.ToString())
+    else if (userInput == Cards.PrecisionStrike.Value.ToString())
     {
-        if (CheckCardAgainstTowerOfPower(Cards.PrecisionStrike))
-        {
-            Console.WriteLine($"{players[i].Name} played '{Cards.PrecisionStrike.Name}'");
-            PrecisionStrikeAction();
-            PlayCard(Cards.PrecisionStrike);
-        }
+        if (!CheckCardAgainstTowerOfPower(Cards.PrecisionStrike)) return;
+        PrecisionStrikeAction();
+        PlayCard(Cards.PrecisionStrike);
     }
-
-    if (userInput == Cards.Feint.Value.ToString())
+    else if (userInput == Cards.Feint.Value.ToString())
     {
-        if (CheckCardAgainstTowerOfPower(Cards.Feint))
-        {
-            Console.WriteLine($"{players[i].Name} played '{Cards.Feint.Name}'");
-            PlayCard(Cards.Feint);
-            FeintAction();
-        }
+        if (!CheckCardAgainstTowerOfPower(Cards.Feint)) return;
+        FeintAction();
+        PlayCard(Cards.Feint);
     }
-
-    if (userInput == Cards.CopyCat.Value.ToString())
+    else if (userInput == Cards.CopyCat.Value.ToString())
     {
-        if (CheckCardAgainstTowerOfPower(Cards.CopyCat))
-        {
-            Console.WriteLine($"{players[i].Name} played '{Cards.CopyCat.Name}'");
-            CopyCatAction();
-        }
+        if (!CheckCardAgainstTowerOfPower(Cards.CopyCat)) return;
+        
+        CopyCatAction();
     }
-
-    if (userInput == Cards.ChangeStance.Value.ToString())
+    else if (userInput == Cards.ChangeStance.Value.ToString())
     {
-        if (CheckCardAgainstTowerOfPower(Cards.ChangeStance))
-        {
-            Console.WriteLine($"{players[i].Name} played '{Cards.ChangeStance.Name}'");
-            ChangeStanceAction();
-            PlayCard(Cards.ChangeStance);
-        }
+        if (!CheckCardAgainstTowerOfPower(Cards.ChangeStance)) return;
+        ChangeStanceAction();
+        PlayCard(Cards.ChangeStance);
     }
-
-    if (userInput == Cards.Disarm.Value.ToString())
+    else if (userInput == Cards.Disarm.Value.ToString())
     {
-        if(CheckCardAgainstTowerOfPower(Cards.Disarm))
-        {
-            Console.WriteLine($"{players[i].Name} played '{Cards.Disarm.Name}'");
-            DisarmAction();
-            PlayCard(Cards.Disarm);
-        }
+        if (!CheckCardAgainstTowerOfPower(Cards.Disarm)) return;
+        DisarmAction();
+        PlayCard(Cards.Disarm);
     }
-
-    if (userInput == Cards.Backstab.Value.ToString())
+    else if (userInput == Cards.Backstab.Value.ToString())
     {
-        if (CheckCardAgainstTowerOfPower(Cards.Backstab))
-        {
-            Console.WriteLine($"{players[i].Name} played '{Cards.Backstab.Name}'");
-            BackstabAction();
-            PlayCard(Cards.Backstab);
-        }
+        if (!CheckCardAgainstTowerOfPower(Cards.Backstab)) return;
+        BackstabAction();
+        PlayCard(Cards.Backstab);
     }
-
-    if (userInput == Cards.Dodge.Value.ToString())
+    else if (userInput == Cards.Dodge.Value.ToString())
     {
-        if (CheckCardAgainstTowerOfPower(Cards.Dodge))
-        {
-            Console.WriteLine($"{players[i].Name} played '{Cards.Dodge.Name}'");
-            PlayCard(Cards.Dodge);
-        }
+        if (!CheckCardAgainstTowerOfPower(Cards.Dodge)) return;
+        Console.WriteLine($"{players[i].Name} played '{Cards.Dodge.Name}'");
+        PlayCard(Cards.Dodge);
     }
-
-    if (userInput == "q")
+    else if (userInput == "q")
         EndSession(players[i].Name, true);
 }
 
@@ -293,6 +260,7 @@ bool MoveCardBetweenDecks(Card card, Deck fromDeck, Deck toDeck, bool hideCard =
 void KillingBlowAction()
 {
     // Bury a face up card.
+    Console.WriteLine($"{players[i].Name} played '{Cards.KillingBlow.Name}'");
     if (towerOfPower.Cards.Count == 0)
     {
         Console.WriteLine($"Nothing in the Tower of Power to bury.");
@@ -401,12 +369,14 @@ void KillingBlowAction()
 void HiddenStrengthAction()
 {
     // Draw a random buried card.
+    Console.WriteLine($"{players[i].Name} played '{Cards.HiddenStrength.Name}'");
     MoveRandomCardBetweenDecks(buriedPile, players[i].Hand, true);
 }
 
 void PrecisionStrikeAction()
 {
     // Put a face up card in your hand.
+    Console.WriteLine($"{players[i].Name} played '{Cards.PrecisionStrike.Name}'");
     if (towerOfPower.Cards.Count == 0)
     {
         Console.WriteLine($"Nothing in the Tower of Power to take.");
@@ -515,12 +485,15 @@ void PrecisionStrikeAction()
 void FeintAction()
 {
     // Play a random card from your target's hand. Ignore the ability.
+    Console.WriteLine($"{players[i].Name} played '{Cards.Feint.Name}'");
     MoveRandomCardBetweenDecks(players[i].Hand, towerOfPower, true);
 };
 
 void CopyCatAction()
 {
     // Copy the ability of any face up card.
+    Console.WriteLine($"{players[i].Name} played '{Cards.CopyCat.Name}'");
+
     if (towerOfPower.Cards.Count == 0)
     {
         Console.WriteLine($"Nothing in the Tower of Power to copy.");
@@ -637,14 +610,16 @@ void CopyCatAction()
 
         if (CopyCatCardChoice == "q")
         {
-            EndSession(players[i].Name, true);
             CopyCatChoice = false;
+            EndSession(players[i].Name, true);
         }
     }
 };
 
 void ChangeStanceAction()
 {
+    Console.WriteLine($"{players[i].Name} played '{Cards.ChangeStance.Name}'");
+
     var otherPlayerIndex = setCurrentPlayerIndex();
 
     var noCardOverFive = true;
@@ -659,12 +634,16 @@ void ChangeStanceAction()
     }
 
     if (noCardOverFive)
+    {
+        Console.WriteLine($"{players[otherPlayerIndex].Name} has no cards over 5 to play.");
         EndSession(players[otherPlayerIndex].Name);
+    }
 };
 
 void DisarmAction()
 {
     // Target buries a card at random.
+    Console.WriteLine($"{players[i].Name} played '{Cards.Disarm.Name}'");
     var otherPlayerIndex = setCurrentPlayerIndex();
     MoveRandomCardBetweenDecks(players[otherPlayerIndex].Hand, buriedPile, true);
 };
@@ -672,6 +651,8 @@ void DisarmAction()
 void BackstabAction()
 {
     // Target gives you a card of their choice.
+    Console.WriteLine($"{players[i].Name} played '{Cards.Backstab.Name}'");
+
     var otherPlayerIndex = setCurrentPlayerIndex();
 
     if (players[otherPlayerIndex].Hand.Cards.Count == 0)
