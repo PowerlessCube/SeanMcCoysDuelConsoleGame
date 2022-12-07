@@ -35,6 +35,8 @@ void StartGame()
 {
     if (isGameStarted)
     {
+        Console.WriteLine("Game Starts!");
+        Console.WriteLine("Burying random cards from players' hands...");
         players.ForEach(player =>
         {
             MoveRandomCardBetweenDecks(player.Hand, buriedPile, true);
@@ -124,55 +126,55 @@ void PlayerInputOptions()
 
     if (userInput == Cards.KillingBlow.Value.ToString())
     {
-        if (!CheckCardAgainstTowerOfPower(Cards.KillingBlow)) return;
+        if (!ValidateCardAgainstTowerOfPower(Cards.KillingBlow)) return;
         KillingBlowAction();
         PlayCard(Cards.KillingBlow);
     }
     else if (userInput == Cards.HiddenStrength.Value.ToString())
     {
-        if (!CheckCardAgainstTowerOfPower(Cards.HiddenStrength)) return;
+        if (!ValidateCardAgainstTowerOfPower(Cards.HiddenStrength)) return;
         HiddenStrengthAction();
         PlayCard(Cards.HiddenStrength);
     }
     else if (userInput == Cards.PrecisionStrike.Value.ToString())
     {
-        if (!CheckCardAgainstTowerOfPower(Cards.PrecisionStrike)) return;
+        if (!ValidateCardAgainstTowerOfPower(Cards.PrecisionStrike)) return;
         PrecisionStrikeAction();
         PlayCard(Cards.PrecisionStrike);
     }
     else if (userInput == Cards.Feint.Value.ToString())
     {
-        if (!CheckCardAgainstTowerOfPower(Cards.Feint)) return;
+        if (!ValidateCardAgainstTowerOfPower(Cards.Feint)) return;
         FeintAction();
         PlayCard(Cards.Feint);
     }
     else if (userInput == Cards.CopyCat.Value.ToString())
     {
-        if (!CheckCardAgainstTowerOfPower(Cards.CopyCat)) return;
+        if (!ValidateCardAgainstTowerOfPower(Cards.CopyCat)) return;
         
         CopyCatAction();
     }
     else if (userInput == Cards.ChangeStance.Value.ToString())
     {
-        if (!CheckCardAgainstTowerOfPower(Cards.ChangeStance)) return;
+        if (!ValidateCardAgainstTowerOfPower(Cards.ChangeStance)) return;
         ChangeStanceAction();
         PlayCard(Cards.ChangeStance);
     }
     else if (userInput == Cards.Disarm.Value.ToString())
     {
-        if (!CheckCardAgainstTowerOfPower(Cards.Disarm)) return;
+        if (!ValidateCardAgainstTowerOfPower(Cards.Disarm)) return;
         DisarmAction();
         PlayCard(Cards.Disarm);
     }
     else if (userInput == Cards.Backstab.Value.ToString())
     {
-        if (!CheckCardAgainstTowerOfPower(Cards.Backstab)) return;
+        if (!ValidateCardAgainstTowerOfPower(Cards.Backstab)) return;
         BackstabAction();
         PlayCard(Cards.Backstab);
     }
     else if (userInput == Cards.Dodge.Value.ToString())
     {
-        if (!CheckCardAgainstTowerOfPower(Cards.Dodge)) return;
+        if (!ValidateCardAgainstTowerOfPower(Cards.Dodge)) return;
         Console.WriteLine($"{players[i].Name} played '{Cards.Dodge.Name}'");
         PlayCard(Cards.Dodge);
     }
@@ -180,7 +182,7 @@ void PlayerInputOptions()
         EndSession(players[i].Name, true);
 }
 
-bool CheckCardAgainstTowerOfPower(Card card)
+bool ValidateCardAgainstTowerOfPower(Card card)
 {
     if (towerOfPower.Cards.Count() == 0)
         return true;
@@ -398,83 +400,74 @@ void PrecisionStrikeAction()
             if (MoveCardBetweenDecks(Cards.KillingBlow, towerOfPower, players[i].Hand))
             {
                 precisionStrikeChoice = false;
+                return;
             };
-            return;
         }
-
-        if (precisionStrikeCardChoice == Cards.HiddenStrength.Value.ToString())
+        else if (precisionStrikeCardChoice == Cards.HiddenStrength.Value.ToString())
         {
             if (MoveCardBetweenDecks(Cards.HiddenStrength, towerOfPower, players[i].Hand));
             {
                 precisionStrikeChoice = false;
+                return;
             }
-            return;
         }
-
-        if (precisionStrikeCardChoice == Cards.PrecisionStrike.Value.ToString())
+        else if (precisionStrikeCardChoice == Cards.PrecisionStrike.Value.ToString())
         {
             if (MoveCardBetweenDecks(Cards.PrecisionStrike, towerOfPower, players[i].Hand))
             {
                 precisionStrikeChoice = false;
+                return;
             }
-            return;
         }
-
-        if (precisionStrikeCardChoice == Cards.Feint.Value.ToString())
+        else if (precisionStrikeCardChoice == Cards.Feint.Value.ToString())
         {
             if (MoveCardBetweenDecks(Cards.Feint, towerOfPower, players[i].Hand))
             {
                 precisionStrikeChoice = false;
+                return;
             };
-            return;
         }
-
-        if (precisionStrikeCardChoice == Cards.CopyCat.Value.ToString())
+        else if (precisionStrikeCardChoice == Cards.CopyCat.Value.ToString())
         {
             if (MoveCardBetweenDecks(Cards.CopyCat, towerOfPower, players[i].Hand))
             {
                 precisionStrikeChoice = false;
+                return;
             };
-            return;
         }
-
-        if (precisionStrikeCardChoice == Cards.ChangeStance.Value.ToString())
+        else if (precisionStrikeCardChoice == Cards.ChangeStance.Value.ToString())
         {
             if (MoveCardBetweenDecks(Cards.ChangeStance, towerOfPower, players[i].Hand))
             {
                 precisionStrikeChoice = false;
+                return;
             };
-            return;
         }
-
-        if (precisionStrikeCardChoice == Cards.Disarm.Value.ToString())
+        else if (precisionStrikeCardChoice == Cards.Disarm.Value.ToString())
         {
             if (MoveCardBetweenDecks(Cards.Disarm, towerOfPower, players[i].Hand))
             {
                 precisionStrikeChoice = false;
+                return;
             };
-            return;
         }
-
-        if (precisionStrikeCardChoice == Cards.Backstab.Value.ToString())
+        else if (precisionStrikeCardChoice == Cards.Backstab.Value.ToString())
         {
             if (MoveCardBetweenDecks(Cards.Backstab, towerOfPower, players[i].Hand))
             {
                 precisionStrikeChoice = false;
+                return;
             };
-            return;
         }
-
-        if (precisionStrikeCardChoice == Cards.Dodge.Value.ToString())
+        else if (precisionStrikeCardChoice == Cards.Dodge.Value.ToString())
         {
             if (MoveCardBetweenDecks(Cards.Dodge, towerOfPower, players[i].Hand))
             {
                 precisionStrikeChoice = false;
+                return;
             };
-            return;
         }
-
-        if (precisionStrikeCardChoice == "q")
+        else if (precisionStrikeCardChoice == "q")
         {
             precisionStrikeChoice = false;
             EndSession(players[i].Name, true);
@@ -521,8 +514,7 @@ void CopyCatAction()
                 return;
             }
         }
-
-        if (CopyCatCardChoice == Cards.HiddenStrength.Value.ToString())
+        else if (CopyCatCardChoice == Cards.HiddenStrength.Value.ToString())
         {
             if (towerOfPower.Cards.Contains(Cards.HiddenStrength))
             {
@@ -532,8 +524,7 @@ void CopyCatAction()
                 return;
             }
         }
-
-        if (CopyCatCardChoice == Cards.PrecisionStrike.Value.ToString())
+        else if (CopyCatCardChoice == Cards.PrecisionStrike.Value.ToString())
         {
             if (towerOfPower.Cards.Contains(Cards.PrecisionStrike))
             {
@@ -543,8 +534,7 @@ void CopyCatAction()
                 return;
             }
         }
-
-        if (CopyCatCardChoice == Cards.Feint.Value.ToString())
+        else if (CopyCatCardChoice == Cards.Feint.Value.ToString())
         {
             if (towerOfPower.Cards.Contains(Cards.Feint))
             {
@@ -554,16 +544,14 @@ void CopyCatAction()
                 return;
             }
         }
-
-        if (CopyCatCardChoice == Cards.CopyCat.Value.ToString())
+        else if (CopyCatCardChoice == Cards.CopyCat.Value.ToString())
         {
             if (towerOfPower.Cards.Contains(Cards.CopyCat))
             {
                 Console.WriteLine("You can't pick CopyCat to Copy!");
             }
         }
-
-        if (CopyCatCardChoice == Cards.ChangeStance.Value.ToString())
+        else if (CopyCatCardChoice == Cards.ChangeStance.Value.ToString())
         {
             if (towerOfPower.Cards.Contains(Cards.ChangeStance))
             {
@@ -573,8 +561,7 @@ void CopyCatAction()
                 return;
             }
         }
-
-        if (CopyCatCardChoice == Cards.Disarm.Value.ToString())
+        else if (CopyCatCardChoice == Cards.Disarm.Value.ToString())
         {
             if (towerOfPower.Cards.Contains(Cards.Disarm))
             {
@@ -584,8 +571,7 @@ void CopyCatAction()
                 return;
             }
         }
-
-        if (CopyCatCardChoice == Cards.Backstab.Value.ToString())
+        else if (CopyCatCardChoice == Cards.Backstab.Value.ToString())
         {
             if (towerOfPower.Cards.Contains(Cards.Backstab))
             {
@@ -595,8 +581,7 @@ void CopyCatAction()
                 return;
             }
         }
-
-        if (CopyCatCardChoice == Cards.Dodge.Value.ToString())
+        else if (CopyCatCardChoice == Cards.Dodge.Value.ToString())
         {
             if (towerOfPower.Cards.Contains(Cards.Dodge))
             {
@@ -607,8 +592,7 @@ void CopyCatAction()
                 return;
             }
         }
-
-        if (CopyCatCardChoice == "q")
+        else if (CopyCatCardChoice == "q")
         {
             CopyCatChoice = false;
             EndSession(players[i].Name, true);
@@ -680,8 +664,7 @@ void BackstabAction()
                 return;
             };
         }
-
-        if (BackstabCardChoice == Cards.HiddenStrength.Value.ToString())
+        else if (BackstabCardChoice == Cards.HiddenStrength.Value.ToString())
         {
             if (MoveCardBetweenDecks(Cards.HiddenStrength, players[otherPlayerIndex].Hand, players[i].Hand))
             {
@@ -689,8 +672,7 @@ void BackstabAction()
                 return;
             };
         }
-
-        if (BackstabCardChoice == Cards.PrecisionStrike.Value.ToString())
+        else if (BackstabCardChoice == Cards.PrecisionStrike.Value.ToString())
         {
             if (MoveCardBetweenDecks(Cards.PrecisionStrike, players[otherPlayerIndex].Hand, players[i].Hand))
             {
@@ -698,8 +680,7 @@ void BackstabAction()
                 return;
             };
         }
-
-        if (BackstabCardChoice == Cards.Feint.Value.ToString())
+        else if (BackstabCardChoice == Cards.Feint.Value.ToString())
         {
             if (MoveCardBetweenDecks(Cards.Feint, players[otherPlayerIndex].Hand, players[i].Hand))
             {
@@ -707,8 +688,7 @@ void BackstabAction()
                 return;
             };
         }
-
-        if (BackstabCardChoice == Cards.ChangeStance.Value.ToString())
+        else if (BackstabCardChoice == Cards.ChangeStance.Value.ToString())
         {
             if (MoveCardBetweenDecks(Cards.ChangeStance, players[otherPlayerIndex].Hand, players[i].Hand))
             {
@@ -716,8 +696,7 @@ void BackstabAction()
                 return;
             };
         }
-
-        if (BackstabCardChoice == Cards.Disarm.Value.ToString())
+        else if (BackstabCardChoice == Cards.Disarm.Value.ToString())
         {
             if (MoveCardBetweenDecks(Cards.Disarm, players[otherPlayerIndex].Hand, players[i].Hand))
             {
@@ -725,8 +704,7 @@ void BackstabAction()
                 return;
             };
         }
-
-        if (BackstabCardChoice == Cards.Backstab.Value.ToString())
+        else if (BackstabCardChoice == Cards.Backstab.Value.ToString())
         {
             if (MoveCardBetweenDecks(Cards.Backstab, players[otherPlayerIndex].Hand, players[i].Hand))
             {
@@ -734,8 +712,7 @@ void BackstabAction()
                 return;
             };
         }
-
-        if (BackstabCardChoice == Cards.Dodge.Value.ToString())
+        else if (BackstabCardChoice == Cards.Dodge.Value.ToString())
         {
             if (MoveCardBetweenDecks(Cards.Dodge, players[otherPlayerIndex].Hand, players[i].Hand))
             {
@@ -743,8 +720,7 @@ void BackstabAction()
                 return;
             };
         }
-
-        if (BackstabCardChoice == "q")
+        else if (BackstabCardChoice == "q")
         {
             backstabChoice = false;
             EndSession(players[i].Name, true);
