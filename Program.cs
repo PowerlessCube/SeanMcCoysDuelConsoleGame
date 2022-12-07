@@ -258,27 +258,27 @@ bool MoveRandomCardBetweenDecks(Deck fromDeck, Deck toDeck, bool hideCard = fals
 
 bool MoveCardBetweenDecks(Card card, Deck fromDeck, Deck toDeck, bool hideCard = false)
 {
-    if (fromDeck.Cards.Contains(card))
+    if (!fromDeck.Cards.Contains(card))
     {
-        fromDeck.Cards.Remove(card);
-        toDeck.Cards.Add(card);
-        
-        if (hideCard)
-        {
-            Console.WriteLine($"A card moved from {fromDeck.Name} to the {toDeck.Name}");
-            Console.WriteLine();
-        }
-        else
-        {
-            Console.WriteLine($"{card.Value}: {card.Name} - moved from {fromDeck.Name} to the {toDeck.Name}");
-            Console.WriteLine();
-        }
-        
-        return true;
+        Console.WriteLine($"{card.Value}: {card.Name}, is not an available choice.");
+        return false;
     }
 
-    Console.WriteLine($"{card.Value}: {card.Name}, is not an available choice.");
-    return false;
+    fromDeck.Cards.Remove(card);
+    toDeck.Cards.Add(card);
+        
+    if (hideCard)
+    {
+        Console.WriteLine($"A card moved from {fromDeck.Name} to the {toDeck.Name}");
+        Console.WriteLine();
+    }
+    else
+    {
+        Console.WriteLine($"{card.Value}: {card.Name} - moved from {fromDeck.Name} to the {toDeck.Name}");
+        Console.WriteLine();
+    }
+        
+    return true;
 }
 #endregion
 
@@ -642,7 +642,7 @@ void ChangeStanceAction()
     if (noCardOverFive)
     {
         Console.WriteLine($"");
-        Console.WriteLine($"{players[i].Name} has lost. Game over!");
+        Console.WriteLine($"{players[otherPlayerIndex].Name} has lost. Game over!");
         Console.WriteLine($"");
         QuittingSession();
     }
