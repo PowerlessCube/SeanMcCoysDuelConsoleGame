@@ -4,7 +4,6 @@ internal class Player
 {
     public string Name;
     public Deck Hand;
-
     public Player(string name)
     {
         Name = name;
