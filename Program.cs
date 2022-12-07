@@ -15,9 +15,19 @@ var players = new List<Player>() { playerOne, playerTwo };
 int i = new Random().Next(0, players.Count);
 
 #region Game Session Actions
-void QuittingSession()
+void EndSession(string playerName, bool quit = false)
 {
-    Console.WriteLine("Your quitting session.");
+    if (quit)
+    {
+        Console.WriteLine($"{playerName} is quitting session.");
+    }
+    else
+    {
+        Console.WriteLine($"");
+        Console.WriteLine($"{playerName} has lost. Game over!");
+        Console.WriteLine($"");
+    }
+
     escape = false;
 }
 
@@ -53,10 +63,7 @@ void CheckWinCondition()
         }
         else
         {
-            Console.WriteLine($"");
-            Console.WriteLine($"{players[i].Name} has lost. Game over!");
-            Console.WriteLine($"");
-            QuittingSession();
+            EndSession(players[i].Name);
             break;
         }
     }
@@ -68,7 +75,7 @@ void DisplayHand()
     Console.WriteLine($"{players[i].Name}'s Turn.");
 
     if (players[i].Hand.Cards.Count == 0)
-        QuittingSession();
+        EndSession(players[i].Name);
 
     DisplayDeck(players[i].Hand.Cards);
 }
@@ -203,7 +210,7 @@ void PlayerInputOptions()
     }
 
     if (userInput == "q")
-        QuittingSession();
+        EndSession(players[i].Name, true);
 }
 
 bool CheckCardAgainstTowerOfPower(Card card)
@@ -384,7 +391,10 @@ void KillingBlowAction()
         }
 
         if (killingBlowCardChoice == "q")
-            QuittingSession();
+        {
+            killingBlowChoice = false;
+            EndSession(players[i].Name, true);
+        }
     }
 }
 
@@ -495,7 +505,10 @@ void PrecisionStrikeAction()
         }
 
         if (precisionStrikeCardChoice == "q")
-            QuittingSession();
+        {
+            precisionStrikeChoice = false;
+            EndSession(players[i].Name, true);
+        }
     }
 }
 
@@ -622,6 +635,11 @@ void CopyCatAction()
             }
         }
 
+        if (CopyCatCardChoice == "q")
+        {
+            EndSession(players[i].Name, true);
+            CopyCatChoice = false;
+        }
     }
 };
 
@@ -639,13 +657,9 @@ void ChangeStanceAction()
             break;
         }
     }
+
     if (noCardOverFive)
-    {
-        Console.WriteLine($"");
-        Console.WriteLine($"{players[otherPlayerIndex].Name} has lost. Game over!");
-        Console.WriteLine($"");
-        QuittingSession();
-    }
+        EndSession(players[otherPlayerIndex].Name);
 };
 
 void DisarmAction()
@@ -750,7 +764,10 @@ void BackstabAction()
         }
 
         if (BackstabCardChoice == "q")
-            QuittingSession();
+        {
+            backstabChoice = false;
+            EndSession(players[i].Name, true);
+        }
     }
 }
 #endregion
