@@ -39,9 +39,9 @@ goes first. The winner is the last player still in the round. Games are typicall
 ## Cards
 ### 0: The Killing Blow ­ 
 **Bury a face up card.**
-The 0 card is the lowest playable card. The only card that can be played after a zero is the trump (*) card.
+The 0 card is the lowest playable card. The only card that can be played after a zero is the trump (\*) card.
 the player must bury a face up card. You may not play a 0 card immediately after a trump
-(*) card is played. Killing Blow may not be used on itself, meaning you cannot bury the card you
+(\*) card is played. Killing Blow may not be used on itself, meaning you cannot bury the card you
 just played.
 
 ### 1: Hidden Strength
@@ -78,7 +78,7 @@ Choose a random card from your opponent’s hand; they place that card face dow
 **Opponent gives you a card of their choice.**
 Opponent chooses a card from their hand and gives it to you.
 
-### *: “Dodge
+### \*: “Dodge
 **Trumps the last card played. Then counts as an 8.**
 Can be played after any card; the next card played now plays as if an 8 was just played. 
-(Note: you cannot play a 0 aftera Trump (*) card.)
+(Note: you cannot play a 0 aftera Trump (\*) card.)
