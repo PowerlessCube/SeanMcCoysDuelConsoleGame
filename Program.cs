@@ -44,7 +44,6 @@ void EndSession(string playerName, bool quit = false)
         Console.WriteLine($"{playerName} has lost. Game over!");
         Console.WriteLine($"");
     }
-
     escape = false;
 }
 
@@ -677,6 +676,11 @@ void BackstabAction(bool isCopyCat = false)
         else if (BackstabCardChoice == Cards.Feint.Value.ToString())
         {
             if (MoveCardBetweenDecks(Cards.Feint, otherPlayer.Hand, currentPlayer.Hand))
+                break;
+        }
+        else if (BackstabCardChoice == Cards.CopyCat.Value.ToString())
+        {
+            if (MoveCardBetweenDecks(Cards.CopyCat, otherPlayer.Hand, currentPlayer.Hand))
                 break;
         }
         else if (BackstabCardChoice == Cards.ChangeStance.Value.ToString())
