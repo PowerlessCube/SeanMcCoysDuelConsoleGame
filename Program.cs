@@ -134,86 +134,103 @@ void DisplayDeck(List<Card> deck)
 
 void PlayerInputOptions()
 {
-    Console.WriteLine();
+    while (true)
+    {
+        DisplayHand();
 
-    var userInput = Console.ReadLine();
+        Console.WriteLine();
 
-    Console.WriteLine();
+        var userInput = Console.ReadLine();
 
-    if (userInput == Cards.KillingBlow.Value.ToString())
-    {
-        if (ValidateCardAgainstTowerOfPower(Cards.KillingBlow))
+        Console.WriteLine();
+
+        if (userInput == Cards.KillingBlow.Value.ToString())
         {
-            Console.WriteLine($"{currentPlayer.Name} played {Cards.KillingBlow.Name}");
-            KillingBlowAction();
+            if (ValidateCardAgainstTowerOfPower(Cards.KillingBlow))
+            {
+                Console.WriteLine($"{currentPlayer.Name} played {Cards.KillingBlow.Name}");
+                KillingBlowAction();
+                break;
+            }
+        }
+        else if (userInput == Cards.HiddenStrength.Value.ToString())
+        {
+            if (ValidateCardAgainstTowerOfPower(Cards.HiddenStrength))
+            {
+                Console.WriteLine($"{currentPlayer.Name} played {Cards.HiddenStrength.Name}");
+                HiddenStrengthAction();
+                break;
+            }
+        }
+        else if (userInput == Cards.PrecisionStrike.Value.ToString())
+        {
+            if (ValidateCardAgainstTowerOfPower(Cards.PrecisionStrike))
+            {
+                Console.WriteLine($"{currentPlayer.Name} played {Cards.PrecisionStrike.Name}");
+                PrecisionStrikeAction();
+                break;
+            }
+        }
+        else if (userInput == Cards.Feint.Value.ToString())
+        {
+            if (ValidateCardAgainstTowerOfPower(Cards.Feint))
+            {
+                Console.WriteLine($"{currentPlayer.Name} played {Cards.Feint.Name}");
+                FeintAction();
+                break;
+            }
+        }
+        else if (userInput == Cards.CopyCat.Value.ToString())
+        {
+            if (ValidateCardAgainstTowerOfPower(Cards.CopyCat))
+            {
+                Console.WriteLine($"{currentPlayer.Name} played {Cards.CopyCat.Name}");
+                CopyCatAction();
+                break;
+            }
+        }
+        else if (userInput == Cards.ChangeStance.Value.ToString())
+        {
+            if (ValidateCardAgainstTowerOfPower(Cards.ChangeStance))
+            {
+                Console.WriteLine($"{currentPlayer.Name} played {Cards.ChangeStance.Name}");
+                ChangeStanceAction();
+                break;
+            }
+        }
+        else if (userInput == Cards.Disarm.Value.ToString())
+        {
+            if (ValidateCardAgainstTowerOfPower(Cards.Disarm))
+            {
+                Console.WriteLine($"{currentPlayer.Name} played {Cards.Disarm.Name}");
+                DisarmAction();
+                break;
+            }
+        }
+        else if (userInput == Cards.Backstab.Value.ToString())
+        {
+            if (ValidateCardAgainstTowerOfPower(Cards.Backstab))
+            {
+                Console.WriteLine($"{currentPlayer.Name} played {Cards.Backstab.Name}");
+                BackstabAction();
+                break;
+            }
+        }
+        else if (userInput == Cards.Dodge.Value.ToString())
+        {
+            if (ValidateCardAgainstTowerOfPower(Cards.Dodge))
+            {
+                Console.WriteLine($"{currentPlayer.Name} played {Cards.Dodge.Name}");
+                DodgeActions();
+                break;
+            }
+        }
+        else if (userInput == "q")
+        {
+            EndSession(currentPlayer.Name, true);
+            break;
         }
     }
-    else if (userInput == Cards.HiddenStrength.Value.ToString())
-    {
-        if (ValidateCardAgainstTowerOfPower(Cards.HiddenStrength))
-        {
-            Console.WriteLine($"{currentPlayer.Name} played {Cards.HiddenStrength.Name}");
-            HiddenStrengthAction();
-        }
-    }
-    else if (userInput == Cards.PrecisionStrike.Value.ToString())
-    {
-        if (ValidateCardAgainstTowerOfPower(Cards.PrecisionStrike))
-        {
-            Console.WriteLine($"{currentPlayer.Name} played {Cards.PrecisionStrike.Name}");
-            PrecisionStrikeAction();
-        }
-    }
-    else if (userInput == Cards.Feint.Value.ToString())
-    {
-        if (ValidateCardAgainstTowerOfPower(Cards.Feint))
-        {
-            Console.WriteLine($"{currentPlayer.Name} played {Cards.Feint.Name}");
-            FeintAction();
-        }
-    }
-    else if (userInput == Cards.CopyCat.Value.ToString())
-    {
-        if (ValidateCardAgainstTowerOfPower(Cards.CopyCat))
-        {
-            Console.WriteLine($"{currentPlayer.Name} played {Cards.CopyCat.Name}");
-            CopyCatAction();
-        }
-    }
-    else if (userInput == Cards.ChangeStance.Value.ToString())
-    {
-        if (ValidateCardAgainstTowerOfPower(Cards.ChangeStance))
-        {
-            Console.WriteLine($"{currentPlayer.Name} played {Cards.ChangeStance.Name}");
-            ChangeStanceAction();
-        }
-    }
-    else if (userInput == Cards.Disarm.Value.ToString())
-    {
-        if (ValidateCardAgainstTowerOfPower(Cards.Disarm))
-        {
-            Console.WriteLine($"{currentPlayer.Name} played {Cards.Disarm.Name}");
-            DisarmAction();
-        }
-    }
-    else if (userInput == Cards.Backstab.Value.ToString())
-    {
-        if (ValidateCardAgainstTowerOfPower(Cards.Backstab))
-        {
-            Console.WriteLine($"{currentPlayer.Name} played {Cards.Backstab.Name}");
-            BackstabAction();
-        }
-    }
-    else if (userInput == Cards.Dodge.Value.ToString())
-    {
-        if (ValidateCardAgainstTowerOfPower(Cards.Dodge))
-        {
-            Console.WriteLine($"{currentPlayer.Name} played {Cards.Dodge.Name}");
-            DodgeActions();
-        }
-    }
-    else if (userInput == "q")
-        EndSession(currentPlayer.Name, true);
 }
 
 bool ValidateCardAgainstTowerOfPower(Card card)
@@ -232,6 +249,13 @@ bool ValidateCardAgainstTowerOfPower(Card card)
             Console.WriteLine();
             return false;
         }
+    }
+
+    if (towerOfPower.Cards.Last().Value == Cards.Dodge.Value && card.Value == Cards.KillingBlow.Value)
+    {
+        Console.WriteLine($"You can not play a {Cards.KillingBlow.Name} after a {Cards.Dodge.Name}.");
+        Console.WriteLine();
+        return false;
     }
 
     if ((card.Value >= towerOfPower.Cards.Last().Value) && (towerOfPower.Cards.Last().Value != Cards.ChangeStance.Value))
@@ -577,7 +601,10 @@ void CopyCatAction()
 void ChangeStanceAction(bool isCopyCat = false)
 {
     if (towerOfPower.Cards.Count == 0 || otherPlayer.Hand.Cards.Contains(Cards.Dodge))
+    {
+        PlayCard(Cards.ChangeStance);
         return;
+    }
 
     var noCardOverFive = true;
 
@@ -595,11 +622,9 @@ void ChangeStanceAction(bool isCopyCat = false)
         Console.WriteLine($"{otherPlayer.Name} has no cards over 5 to play.");
         EndSession(otherPlayer.Name);
     } 
-    else
-    {
-        if (isCopyCat) return;
-        PlayCard(Cards.ChangeStance);
-    }
+    
+    if (isCopyCat) return;
+    PlayCard(Cards.ChangeStance);
 };
 
 void DisarmAction(bool isCopyCat = false)
@@ -707,7 +732,6 @@ while (escape)
     StartGame();
     SwitchPlayers();
     DisplayGameState();
-    DisplayHand();
     PlayerInputOptions();
     CheckWinCondition();
 }
