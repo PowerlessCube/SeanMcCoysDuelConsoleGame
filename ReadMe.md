@@ -1,5 +1,10 @@
-﻿# Sean McCoy's Duel
+﻿# Sean McCoy's Duel Instructions
 2 - 4 player card game.
+
+## Dev Notes
+Written in C# as a console app. To run it download and run via visual Studio 2022 and press F5.
+
+Orginal Game creator is Sean McCoy - please check out his work at [here](https://www.tuesdayknightgames.com/)
 
 ## Introduction
 You’ve been walking for days in an endless plain. You vaguely remember a life before this, but
