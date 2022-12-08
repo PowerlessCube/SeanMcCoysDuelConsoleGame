@@ -649,6 +649,7 @@ void BackstabAction(bool isCopyCat = false)
         if (otherPlayer.Hand.Cards.Count == 0)
         {
             Console.WriteLine($"Nothing in the {otherPlayer.Name}'s Hand to take.");
+            EndSession(otherPlayer.Name);
             break;
         }
 
