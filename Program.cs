@@ -62,9 +62,7 @@ void SwitchPlayers()
 void CheckWinCondition()
 {
     if (towerOfPower.Cards.Count == 0 || otherPlayer.Hand.Cards.Contains(Cards.Dodge))
-    {
         return;
-    }
     
     var lastCardPlayed = towerOfPower.Cards.Last();
 
@@ -72,7 +70,6 @@ void CheckWinCondition()
 
     for (int j = 0; j < otherPlayer.Hand.Cards.Count - 1; j++)
     {
-
         if (otherPlayer.Hand.Cards[j].Value < lastCardPlayed.Value)
         {
             endSession = false;
@@ -85,7 +82,6 @@ void CheckWinCondition()
         Console.WriteLine($"{otherPlayer.Name} has no cards below {lastCardPlayed.Value} to play.");
         EndSession(otherPlayer.Name);
     }
-
 }
 
 void DisplayHand()
@@ -581,9 +577,7 @@ void CopyCatAction()
 void ChangeStanceAction(bool isCopyCat = false)
 {
     if (towerOfPower.Cards.Count == 0 || otherPlayer.Hand.Cards.Contains(Cards.Dodge))
-    {
         return;
-    }
 
     var noCardOverFive = true;
 
